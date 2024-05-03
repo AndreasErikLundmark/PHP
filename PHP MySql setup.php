@@ -1,6 +1,7 @@
 <?php
 //Setting up a Mysql database with gathered examples. XAMPP configured
 //https://www.w3schools.com/php/php_mysql_select_where.asp
+//https://www.wikihow.tech/Prevent-SQL-Injection-in-PHP
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
