@@ -4,7 +4,7 @@
 //header('Content-Type: text/plain');
 
 //open file (r+ == read and write )
-$counterFile = fopen("/Applications/XAMPP/xamppfiles/htdocs/Wprog2/Uppgifter/counter.txt", "r+") or die("Cannot open file!");
+$counterFile = fopen("counter.txt", "r+") or die("Cannot open file!");
 
 if (flock($counterFile, LOCK_EX)) {
 
