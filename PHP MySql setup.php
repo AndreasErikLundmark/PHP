@@ -74,17 +74,23 @@ $stmt->close();
 
 //SELECT EXAMPLE
 $sql = "SELECT id, name, comment,reg_date FROM testTable";
+//Prepares statement. Holds the statement, preventing SQL injection
+$stmt = $conn->prepare($sql);
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    // output data of each row
-    while ($row = $result->fetch_assoc()) {
-        echo $row["reg_date"] . "/ id: " . $row["id"] . "/ Name: " . $row["name"] . " / Comment: " . $row["comment"] . "<br>";
+
+    $stmt->execute();
+        // bind_result separate data from datatable
+    $stmt->bind_result($id, $name,$comment, $reg_date);
+
+    while ($stmt->fetch()) {
+        echo $reg_date . "/ id: " . $id . "/ Name: " . $name . " / Comment: " . $comment . "<br>" . "<br>";
     }
 } else {
     echo "No data was fetched from " . $dbname . "<br>";
 }
-
+$stmt->close();
 $conn->close();
 
 ?>
