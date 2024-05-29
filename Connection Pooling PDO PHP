@@ -1,12 +1,9 @@
 <?php
-//connection pooling class using PDO 
 //https://www.php.net/manual/en/pdo.connections.php
-//consider connection time handling which is not present here. 
-// returnConnection($connection) when done using the connection!!!
-//PDO supports beginTransaction(), commit() and rollback() as long as database does. 
-//see documentation
 
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 class dbConnectionPool
 {
     private static $connectionPool = null;
@@ -17,7 +14,7 @@ class dbConnectionPool
 
     private function __construct()
     {
-
+        echo "connection pool created";
     }
 
 //Creates the pool when called
@@ -34,14 +31,15 @@ class dbConnectionPool
     public function getConnection()
     {
         if (count(self::$pool) === self::$poolSize) {
-            throw new Exception('Connections busy, please try again');
+
+            echo 'Connections busy, please try again';
+            exit();
         }
 
         if (empty(self::$pool)) {
-            $servername = "mysql:host=localhost";
+            $dsn = 'mysql:host=localhost;dbname=Wprog2DB1';
             $username = "root";
             $password = "";
-            $dbname = "database name"; // Database
 
             $options = array(
 //                Persistent connections are not closed at the end of the script, Request a persistent connection, rather than creating a new connection
@@ -50,10 +48,11 @@ class dbConnectionPool
             );
 
             try {
-                $connection = new PDO($servername, $dbname, $username, $password, $options);
+                $connection = new PDO($dsn, $username, $password, $options);
                 self::$pool[] = $connection;
             } catch (PDOException $e) {
-                throw new Exception('Error: ' . $e->getMessage());
+//                throw new Exception('Error: ' . $e->getMessage());
+                echo 'nope';
             }
         } else {
             return array_pop(self::$pool);
@@ -61,7 +60,7 @@ class dbConnectionPool
 
         return $connection;
     }
-    
+
     public function returnConnection($connection)
     {
         self::$pool[] = $connection;
